@@ -72,4 +72,32 @@ class NewsApiController extends Controller
     }
 
 
+    public function index(Request $request)
+{
+    $client = new Client();
+    $url = 'https://newsapi.org/v2/top-headlines?country=us';
+    $apiKey = '2b5c5c3ce4c248dab3f726ebe8d0ac7c';
+
+    if ($request->has('author')) {
+        $url .= '&author=' . $request->query('author');
+    }
+
+    if ($request->has('category')) {
+        $url .= '&category=' . $request->query('category');
+    }
+
+    $response = $client->request('GET', $url, [
+        'headers' => [
+            'Authorization' => 'Bearer ' . $apiKey
+        ]
+    ]);
+
+    $data = json_decode($response->getBody());
+
+    return response()->json($data);
 }
+
+
+};
+
+
