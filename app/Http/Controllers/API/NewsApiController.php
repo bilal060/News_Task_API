@@ -76,7 +76,7 @@ class NewsApiController extends Controller
 {
     $client = new Client();
     $url = 'https://newsapi.org/v2/top-headlines?country=us';
-    $apiKey = '2b5c5c3ce4c248dab3f726ebe8d0ac7c';
+    $apiKey = 'pub_193055d8bb61a01a0be30f935305b3bea935f';
 
     if ($request->has('author')) {
         $url .= '&author=' . $request->query('author');
