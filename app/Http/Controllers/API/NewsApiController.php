@@ -50,33 +50,27 @@ class NewsApiController extends Controller
         ]);
     }
 
-
-
-    public function index(Request $request)
+public function filterByAuthor(Request $request ,$authorName)
 {
-    $client = new Client();
-    $url = 'https://newsapi.org/v2/top-headlines?country=us';
-    $apiKey = 'pub_193055d8bb61a01a0be30f935305b3bea935f';
 
-    if ($request->has('author')) {
-        $url .= '&author=' . $request->query('author');
+   $jsonData = Http::get('https://newsapi.org/v2/top-headlines?country=us&apiKey=b2a64c534fff42809aaa65f271409db9')->json();
+    $articles = $jsonData['articles'];
+    $filtered_articles = [];
+
+    foreach ($articles as $article) {
+        if ($article['author'] === $authorName) {
+            $filtered_articles[] = $article;
+        }else{
+            return response()->json('No record found');
+        }
     }
+    return response()->json($filtered_articles);
 
-    if ($request->has('category')) {
-        $url .= '&category=' . $request->query('category');
-    }
 
-    $response = $client->request('GET', $url, [
-        'headers' => [
-            'Authorization' => 'Bearer ' . $apiKey
-        ]
-    ]);
 
-    $data = json_decode($response->getBody());
 
-    return response()->json($data);
+
 }
 
+
 };
-
-
