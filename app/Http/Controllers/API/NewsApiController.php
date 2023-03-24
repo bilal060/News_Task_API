@@ -33,13 +33,14 @@ class NewsApiController extends Controller
         $language = $request->input('language', 'en');
         $response = $client->request('GET', 'https://newsapi.org/v2/top-headlines', [
             'query' => [
-                'apiKey' => $apiKey,
                 'country' => $country,
+                'apiKey' => $apiKey,
+                'category' => $request->input('category'),
                 // 'language' => $language,
                 // 'apiKey' => $request->input('apiKey'),
                 // 'country' => $request->input('country'),
                 // 'sources' => $request->input('sources'),
-                // 'category' => $request->input('category'),
+
                 //  'q' => $request->input('q'),
                 // 'pageSize' => $request->input('pageSize'),
                 // 'page' => $request->input('page'),
