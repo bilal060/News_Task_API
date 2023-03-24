@@ -11,44 +11,42 @@ class NewsApiController extends Controller
 {
     public function getNews(Request $request)
     {
+    //  $apiKey = $request->input('b2a64c534fff42809aaa65f271409db9');
+    //     $validator = Validator::make($request->all(), [
+    //         'apiKey' => 'required|string',
+    //         'country' => 'sometimes|string',
+    //         //  'sources' => 'sometimes|string',
+    //         // // 'category' => 'sometimes|string',
+    //         //  'q' => 'sometimes|string',
+    //         // // 'pageSize' => 'sometimes|integer|max:100',
+    //         // // 'page' => 'sometimes|integer',
+    //     ]);
 
-        $validator = Validator::make($request->all(), [
-            'apiKey' => 'required|string',
-            'country' => 'sometimes|string',
-             'sources' => 'sometimes|string',
-            // 'category' => 'sometimes|string',
-             'q' => 'sometimes|string',
-            // 'pageSize' => 'sometimes|integer|max:100',
-            // 'page' => 'sometimes|integer',
-        ]);
-
-        if ($validator->fails()) {
-            return response()->json($validator->errors(), 400);
-        }
+    //     if ($validator->fails()) {
+    //         return response()->json($validator->errors(), 400);
+    //     }
 
         $client = new Client();
-         $apiKey = $request->input('2b5c5c3ce4c248dab3f726ebe8d0ac7c');
+         $apiKey = $request->input('apiKey','b2a64c534fff42809aaa65f271409db9');
          $category = $request->input('category', 'general');
+         $country = $request->input('country', 'us');
         $language = $request->input('language', 'en');
-        $response = $client->request('GET', 'https://newsapi.org/v2/everything', [
+        $response = $client->request('GET', 'https://newsapi.org/v2/top-headlines', [
             'query' => [
                 'apiKey' => $apiKey,
-                'category' => $category,
-                'language' => $language,
-
+                'country' => $country,
+                // 'language' => $language,
                 // 'apiKey' => $request->input('apiKey'),
                 // 'country' => $request->input('country'),
                 // 'sources' => $request->input('sources'),
                 // 'category' => $request->input('category'),
-                 'q' => $request->input('q'),
+                //  'q' => $request->input('q'),
                 // 'pageSize' => $request->input('pageSize'),
                 // 'page' => $request->input('page'),
             ]
         ]);
 
         $data = json_decode($response->getBody()->getContents(), true);
-
-
         return response()->json([
             'status' => 'ok',
             'totalResults' => $data['totalResults'],

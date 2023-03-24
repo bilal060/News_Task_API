@@ -31,7 +31,7 @@ class UserController extends Controller
         return response()->json(['message' => 'User created successfully',
     'user'=>  $user ], 201);
     }
-
+        
 
     public function login(Request $request)
     {
