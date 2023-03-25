@@ -50,7 +50,7 @@ class NewsApiController extends Controller
         ]);
     }
 
-public function filterByAuthor(Request $request ,$authorName)
+public function getNewsbyAuthor(Request $request ,$authorName)
 {
     print_r($authorName);
     $client = new Client();
@@ -60,6 +60,7 @@ public function filterByAuthor(Request $request ,$authorName)
        'query' => [
            'country' => $country,
            'apiKey' => $apiKey,
+
        ]
    ]);
    $data = json_decode($response->getBody()->getContents(), true);
@@ -75,6 +76,37 @@ public function filterByAuthor(Request $request ,$authorName)
     return response()->json($filtered_articles);
 
 }
+
+
+
+public function filterByCategoryandAuthor(Request $request, $category ,$authorName)
+{
+    print_r($authorName);
+    $client = new Client();
+    $apiKey = $request->input('apiKey','8384ec7944444d4183eff4e85d2f530e');
+    $country = $request->input('country', 'us');
+    $response = $client->request('GET', 'https://newsapi.org/v2/top-headlines', [
+       'query' => [
+           'country' => $country,
+           'apiKey' => $apiKey,
+           'category'=> $category
+
+       ]
+   ]);
+   $data = json_decode($response->getBody()->getContents(), true);
+    $articles = $data['articles'];
+    $filtered_articles = [];
+
+    foreach ($articles as $article) {
+        if ($article['author'] === $authorName) {
+            $filtered_articles[] = $article;
+        }
+
+    }
+    return response()->json($filtered_articles);
+
+}
+
 
 
 };

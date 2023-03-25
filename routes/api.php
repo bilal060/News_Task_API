@@ -22,7 +22,8 @@ Route::post('register', [UserController::class, 'register']);
 Route::post('login', [UserController::class, 'login']);
 Route::get('/news', [NewsApiController::class, 'getNews']);
 Route::get('/news/{category}', [NewsApiController::class, 'getNewsbyCategories']);
-Route::get('/news/{authorName}', [NewsApiController::class, 'filterByAuthor']);
+Route::get('/newsbyAuthor/{authorName}', [NewsApiController::class, 'getNewsbyAuthor']);
+Route::get('/news/{category}/{authorName}', [NewsApiController::class, 'filterByCategoryandAuthor']);
 
 
 
