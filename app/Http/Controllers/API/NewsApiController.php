@@ -12,7 +12,7 @@ class NewsApiController extends Controller
     public function getNews(Request $request)
     {
         $client = new Client();
-         $apiKey = $request->input('apiKey','b2a64c534fff42809aaa65f271409db9');
+         $apiKey = $request->input('apiKey','8384ec7944444d4183eff4e85d2f530e');
          $country = $request->input('country', 'us');
         $response = $client->request('GET', 'https://newsapi.org/v2/top-headlines', [
             'query' => [
@@ -33,7 +33,7 @@ class NewsApiController extends Controller
     public function getNewsbyCategories(Request $request , $category)
     {
         $client = new Client();
-         $apiKey = $request->input('apiKey','b2a64c534fff42809aaa65f271409db9');
+         $apiKey = $request->input('apiKey','8384ec7944444d4183eff4e85d2f530e');
          $country = $request->input('country', 'us');
         $response = $client->request('GET', 'https://newsapi.org/v2/top-headlines', [
             'query' => [
@@ -52,8 +52,9 @@ class NewsApiController extends Controller
 
 public function filterByAuthor(Request $request ,$authorName)
 {
+    print_r($authorName);
     $client = new Client();
-    $apiKey = $request->input('apiKey','b2a64c534fff42809aaa65f271409db9');
+    $apiKey = $request->input('apiKey','8384ec7944444d4183eff4e85d2f530e');
     $country = $request->input('country', 'us');
     $response = $client->request('GET', 'https://newsapi.org/v2/top-headlines', [
        'query' => [
@@ -72,10 +73,6 @@ public function filterByAuthor(Request $request ,$authorName)
 
     }
     return response()->json($filtered_articles);
-
-
-
-
 
 }
 

@@ -20,8 +20,9 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 Route::post('register', [UserController::class, 'register']);
 Route::post('login', [UserController::class, 'login']);
-Route::get('/getnewsapi', [NewsApiController::class, 'getNews']);
-Route::get('/getnewsapi/{category}', [NewsApiController::class, 'getNewsbyCategories']);
+Route::get('/news', [NewsApiController::class, 'getNews']);
+Route::get('/news/{category}', [NewsApiController::class, 'getNewsbyCategories']);
 Route::get('/news/{authorName}', [NewsApiController::class, 'filterByAuthor']);
+
 
 
