@@ -52,17 +52,24 @@ class NewsApiController extends Controller
 
 public function filterByAuthor(Request $request ,$authorName)
 {
-
-   $jsonData = Http::get('https://newsapi.org/v2/top-headlines?country=us&apiKey=b2a64c534fff42809aaa65f271409db9')->json();
-    $articles = $jsonData['articles'];
+    $client = new Client();
+    $apiKey = $request->input('apiKey','b2a64c534fff42809aaa65f271409db9');
+    $country = $request->input('country', 'us');
+    $response = $client->request('GET', 'https://newsapi.org/v2/top-headlines', [
+       'query' => [
+           'country' => $country,
+           'apiKey' => $apiKey,
+       ]
+   ]);
+   $data = json_decode($response->getBody()->getContents(), true);
+    $articles = $data['articles'];
     $filtered_articles = [];
 
     foreach ($articles as $article) {
         if ($article['author'] === $authorName) {
             $filtered_articles[] = $article;
-        }else{
-            return response()->json('No record found');
         }
+
     }
     return response()->json($filtered_articles);
 
