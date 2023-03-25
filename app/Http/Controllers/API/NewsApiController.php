@@ -52,7 +52,9 @@ class NewsApiController extends Controller
 
 public function getNewsbyAuthor(Request $request ,$authorName)
 {
-    print_r($authorName);
+
+    $full_name = str_replace('_', ' ', $authorName);
+    print_r($full_name);
     $client = new Client();
     $apiKey = $request->input('apiKey','8384ec7944444d4183eff4e85d2f530e');
     $country = $request->input('country', 'us');
@@ -68,7 +70,7 @@ public function getNewsbyAuthor(Request $request ,$authorName)
     $filtered_articles = [];
 
     foreach ($articles as $article) {
-        if ($article['author'] === $authorName) {
+        if ($article['author'] === $full_name) {
             $filtered_articles[] = $article;
         }
 
@@ -77,6 +79,34 @@ public function getNewsbyAuthor(Request $request ,$authorName)
 
 }
 
+
+
+public function getAuthor(Request $request)
+{
+
+    $client = new Client();
+    $apiKey = $request->input('apiKey','8384ec7944444d4183eff4e85d2f530e');
+    $country = $request->input('country', 'us');
+    $response = $client->request('GET', 'https://newsapi.org/v2/top-headlines', [
+       'query' => [
+           'country' => $country,
+           'apiKey' => $apiKey,
+
+       ]
+   ]);
+   $data = json_decode($response->getBody()->getContents(), true);
+    $articles = $data['articles'];
+    $authors = [];
+    foreach ($articles as $article) {
+        $author = $article['author'];
+        if (!empty($author)) {
+            $authors[] = $author;
+        }
+    }
+
+    return response()->json($authors);
+
+}
 
 
 public function filterByCategoryandAuthor(Request $request, $category ,$authorName)
