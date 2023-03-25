@@ -54,7 +54,6 @@ public function getNewsbyAuthor(Request $request ,$authorName)
 {
 
     $full_name = str_replace('_', ' ', $authorName);
-    print_r($full_name);
     $client = new Client();
     $apiKey = $request->input('apiKey','8384ec7944444d4183eff4e85d2f530e');
     $country = $request->input('country', 'us');
