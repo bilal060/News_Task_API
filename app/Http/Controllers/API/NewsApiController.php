@@ -168,7 +168,24 @@ public function getAuthorbycategory(Request $request,$category)
 
 
 
-
+public function NewYourkNews(Request $request)
+{
+    $client = new Client();
+     $apiKey = $request->input('api-key','67jOh73QDljMpbwMEE7owqNwLdTESCwZ');
+     $country = $request->input('country', 'us');
+    $response = $client->request('GET', 'https://api.nytimes.com/svc/mostpopular/v2/emailed/7.json', [
+        'query' => [
+            'api-key' => $apiKey,
+        ]
+    ]);
+    $data = json_decode($response->getBody()->getContents(), true);
+    return response()->json([
+        'status' => 'ok',
+        'copyright' => $data['copyright'],
+        'num_results' => $data['num_results'],
+        'results' => $data['results'],
+    ]);
+}
 
 
 };
