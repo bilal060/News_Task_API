@@ -200,13 +200,59 @@ public function nytNewsbyCategory(Request $request , $category)
              'api-key' => $apiKey,
          ]
      ]);
-    $data = json_decode($response->getBody()->getContents(), true);
-    return response()->json([
-        'status' => 'ok',
-        'copyright' => $data['copyright'],
-        'num_results' => $data['num_results'],
-        'results' => $data['results'],
-    ]);
+     $articles = json_decode($response->getBody(), true)["results"];
+
+     $multimedia = [];
+     foreach ($articles as $article) {
+         $articleMultimedia = $article["multimedia"];
+         foreach ($articleMultimedia as $media) {
+             $multimedia[] = $media["url"];
+         }
+     }
+
+     return response()->json([
+        // 'status' => 'ok',
+        // // 'copyright' => $articles['copyright'],
+        // 'num_results' => $articles['num_results'],
+        //  'articles' => $articles['results'],
+        'articles'=>$articles,
+         "multimedia" => $multimedia,
+
+     ]);
+
+    // return response()->json([
+    //     'status' => 'ok',
+    //     'copyright' => $data['copyright'],
+    //     'num_results' => $data['num_results'],
+    //     'articles' => $data['results'],
+    //      'media' => $multimedia
+    // ]);
 }
 
+
+
+
+public function newsApi(Request $request , $category)
+{
+    $full_name = str_replace('', '.json', $category);
+
+    $client = new Client();
+     $apiKey = $request->input('api-key','67jOh73QDljMpbwMEE7owqNwLdTESCwZ');
+     $response = Http::withHeaders([
+        'Content-Type' => 'application/json',
+    ])->get('http://eventregistry.org/api/v1/article/getArticles', [
+        'uri' => '240f6a12-b9d8-40a6-b1c6-a220e31d08de',
+        'infoArticleBodyLen' => -1,
+        'resultType' => 'articles',
+        'articlesSortBy' => 'fq',
+        'apiKey' => 'ca75f93c-9412-42bc-a6ec-d789dbd34fbe',
+    ]);
+    $data = json_decode($response->getBody()->getContents(), true);
+    return response()->json([
+        $data
+    ]);
+}
 };
+
+
+
