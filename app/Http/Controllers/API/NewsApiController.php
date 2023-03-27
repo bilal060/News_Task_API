@@ -232,25 +232,39 @@ public function nytNewsbyCategory(Request $request , $category)
 
 
 
-public function newsApi(Request $request , $category)
+public function newsApi()
 {
-    $full_name = str_replace('', '.json', $category);
+    $url = 'http://eventregistry.org/api/v1/article/getArticles';
 
-    $client = new Client();
-     $apiKey = $request->input('api-key','67jOh73QDljMpbwMEE7owqNwLdTESCwZ');
-     $response = Http::withHeaders([
-        'Content-Type' => 'application/json',
-    ])->get('http://eventregistry.org/api/v1/article/getArticles', [
-        'uri' => '240f6a12-b9d8-40a6-b1c6-a220e31d08de',
-        'infoArticleBodyLen' => -1,
-        'resultType' => 'articles',
-        'articlesSortBy' => 'fq',
-        'apiKey' => 'ca75f93c-9412-42bc-a6ec-d789dbd34fbe',
-    ]);
-    $data = json_decode($response->getBody()->getContents(), true);
-    return response()->json([
-        $data
-    ]);
+    $data = [
+        "action" => "getArticles",
+        "keyword" => "Barack Obama",
+        "articlesPage" => 1,
+        "articlesCount" => 20,
+        "articlesSortBy" => "date",
+        "articlesSortByAsc" => false,
+        "articlesArticleBodyLen" => -1,
+        "resultType" => "articles",
+        "dataType" => [
+            "news",
+            "pr"
+        ],
+        "apiKey" => "ca75f93c-9412-42bc-a6ec-d789dbd34fbe",
+        "forceMaxDataTimeWindow" => 31
+    ];
+
+    $options = [
+        'http' => [
+            'header' => "Content-type: application/json\r\n",
+            'method' => 'POST',
+            'content' => json_encode($data)
+        ]
+    ];
+
+    $context = stream_context_create($options);
+    $result = file_get_contents($url, false, $context);
+
+    return response($result)->header('Content-Type', 'application/json');
 }
 };
 
