@@ -190,16 +190,16 @@ public function nytNews(Request $request)
 
 public function nytNewsbyCategory(Request $request , $category)
 {
-    $full_name = str_replace('world', 'world.txt', $category);
+    $full_name = str_replace('', '.json', $category);
 
     $client = new Client();
      $apiKey = $request->input('api-key','67jOh73QDljMpbwMEE7owqNwLdTESCwZ');
      $country = $request->input('country', 'us');
-    $response = $client->request('GET', 'https://api.nytimes.com/svc/mostpopular/v2/emailed/7.json', [
-        'query' => [
-            'api-key' => $apiKey,
-        ]
-    ]);
+     $response = $client->request('GET', 'https://api.nytimes.com/svc/topstories/v2/' . $category . '.json', [
+         'query' => [
+             'api-key' => $apiKey,
+         ]
+     ]);
     $data = json_decode($response->getBody()->getContents(), true);
     return response()->json([
         'status' => 'ok',
