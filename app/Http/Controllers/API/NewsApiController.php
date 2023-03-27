@@ -205,9 +205,9 @@ public function nytNewsbyCategory(Request $request , $category)
      $multimedia = [];
      foreach ($articles as $article) {
          $articleMultimedia = $article["multimedia"];
-         foreach ($articleMultimedia as $media) {
-             $multimedia[] = $media["url"];
-         }
+        //  foreach ($articleMultimedia as $media) {
+        //      $multimedia[] = $media["url"];
+        //  }
      }
 
      return response()->json([
@@ -216,7 +216,7 @@ public function nytNewsbyCategory(Request $request , $category)
         // 'num_results' => $articles['num_results'],
         //  'articles' => $articles['results'],
         'articles'=>$articles,
-         "multimedia" => $multimedia,
+         "multimedia" => $articleMultimedia,
 
      ]);
 
@@ -234,39 +234,34 @@ public function nytNewsbyCategory(Request $request , $category)
 
 public function newsApi()
 {
-    $url = 'http://eventregistry.org/api/v1/article/getArticles';
+        $client = new Client();
 
-    $data = [
-        "action" => "getArticles",
-        "keyword" => "Barack Obama",
-        "articlesPage" => 1,
-        "articlesCount" => 20,
-        "articlesSortBy" => "date",
-        "articlesSortByAsc" => false,
-        "articlesArticleBodyLen" => -1,
-        "resultType" => "articles",
-        "dataType" => [
-            "news",
-            "pr"
-        ],
-        "apiKey" => "ca75f93c-9412-42bc-a6ec-d789dbd34fbe",
-        "forceMaxDataTimeWindow" => 31
-    ];
+        $response = $client->request('GET', 'http://eventregistry.org/api/v1/article/getArticles', [
+            'headers' => [
+                'Content-Type' => 'application/json',
+            ],
+            'json' => [
+                "action" => "getArticles",
+                "keyword" => "Barack Obama",
+                "articlesPage" => 1,
+                "articlesCount" => 100,
+                "articlesSortBy" => "date",
+                "articlesSortByAsc" => false,
+                "articlesArticleBodyLen" => -1,
+                "resultType" => "articles",
+                "dataType" => [
+                    "news",
+                    "pr"
+                ],
+                "apiKey" => "ca75f93c-9412-42bc-a6ec-d789dbd34fbe",
+                "forceMaxDataTimeWindow" => 31
+            ]
+        ]);
 
-    $options = [
-        'http' => [
-            'header' => "Content-type: application/json\r\n",
-            'method' => 'POST',
-            'content' => json_encode($data)
-        ]
-    ];
-
-    $context = stream_context_create($options);
-    $result = file_get_contents($url, false, $context);
-
-    return response($result)->header('Content-Type', 'application/json');
+        return $response->getBody();
+    }
 }
-};
+
 
 
 
