@@ -26,7 +26,7 @@ Route::get('/newsbyAuthor/{authorName}', [NewsApiController::class, 'getNewsbyAu
 Route::get('/news/{category}/{authorName}', [NewsApiController::class, 'filterByCategoryandAuthor']);
 Route::get('/author', [NewsApiController::class, 'getAuthor']);
 Route::get('/author/{category}', [NewsApiController::class, 'getAuthorbycategory']);
-Route::get('/NYTnews', [NewsApiController::class, 'NewYourkNews']);
+Route::get('/NYTnews', [NewsApiController::class, 'nytNews']);
 
 
 
