@@ -238,7 +238,46 @@ public function newsApi()
                 "resultType" => "articles",
                 "dataType" => [
                     "news",
-                    "pr"
+                    "pr",
+                    "blog"
+                ],
+                "apiKey" => "ca75f93c-9412-42bc-a6ec-d789dbd34fbe",
+                "forceMaxDataTimeWindow" => 31
+            ]
+        ]);
+
+        // return  response()->json([
+        //     $response->getBody()
+
+        //  ]);
+
+        $data = json_decode($response->getBody(), true);
+
+        $result = $data['articles']['results'];
+
+        return response()->json([
+            'articles'=>$result,
+         ]);
+    }
+    public function newsApibyCategory($category)
+{
+        $client = new Client();
+
+        $response = $client->request('GET', 'http://eventregistry.org/api/v1/article/getArticles', [
+            'headers' => [
+                'Content-Type' => 'application/json',
+            ],
+            'json' => [
+                "action" => "getArticles",
+                "keyword" => "Barack Obama",
+                "articlesPage" => 1,
+                "articlesCount" => 100,
+                "articlesSortBy" => "date",
+                "articlesSortByAsc" => false,
+                "articlesArticleBodyLen" => -1,
+                "resultType" => "articles",
+                "dataType" => [
+                    $category
                 ],
                 "apiKey" => "ca75f93c-9412-42bc-a6ec-d789dbd34fbe",
                 "forceMaxDataTimeWindow" => 31
