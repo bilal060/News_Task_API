@@ -205,28 +205,15 @@ public function nytNewsbyCategory(Request $request , $category)
      $multimedia = [];
      foreach ($articles as $article) {
          $articleMultimedia = $article["multimedia"];
-        //  foreach ($articleMultimedia as $media) {
-        //      $multimedia[] = $media["url"];
-        //  }
      }
 
      return response()->json([
-        // 'status' => 'ok',
-        // // 'copyright' => $articles['copyright'],
-        // 'num_results' => $articles['num_results'],
-        //  'articles' => $articles['results'],
         'articles'=>$articles,
          "multimedia" => $articleMultimedia,
 
      ]);
 
-    // return response()->json([
-    //     'status' => 'ok',
-    //     'copyright' => $data['copyright'],
-    //     'num_results' => $data['num_results'],
-    //     'articles' => $data['results'],
-    //      'media' => $multimedia
-    // ]);
+
 }
 
 
@@ -258,7 +245,18 @@ public function newsApi()
             ]
         ]);
 
-        return $response->getBody();
+        // return  response()->json([
+        //     $response->getBody()
+
+        //  ]);
+
+        $data = json_decode($response->getBody(), true);
+
+        $result = $data['articles']['results'];
+
+        return response()->json([
+            'articles'=>$result,
+         ]);
     }
 }
 
